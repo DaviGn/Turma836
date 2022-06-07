@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev:server": "ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts"
+    "build": "tsc",
+    "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules ./src/index.ts"
   },
   "keywords": [],
   "author": "",
