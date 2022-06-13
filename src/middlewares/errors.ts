@@ -6,7 +6,7 @@ export default async function errorsMiddleware(
   err: any,
   request: Request,
   response: Response,
-  next: any
+  next: any,
 ) {
   if (err instanceof FieldException)
     return response.send(err.errors).status(err.statusCode);
