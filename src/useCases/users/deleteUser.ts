@@ -1,13 +1,21 @@
+import { Repository } from 'typeorm';
+import User from '../../models/User';
 import UsersRepository from '../../repositories/usersRepository';
 
 export default class DeleteUserUseCase {
-  private _repository: UsersRepository;
+  private _repository: Repository<User>;
 
-  constructor(repository: UsersRepository) {
-    this._repository = repository;
+  constructor() {
+    this._repository = UsersRepository;
   }
 
-  public execute(id: string): void {
-    this._repository.delete(id);
+  public async execute(id: string): Promise<void> {
+    const user = await this._repository.findOneBy({
+      id,
+    });
+
+    if (!user) return;
+
+    await this._repository.remove(user);
   }
 }

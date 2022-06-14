@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import User from '../models/User';
-import UserRepository from '../repositories/usersRepository';
 
 import ListUsersUseCase from '../useCases/users/listUsers';
 import GetUserUseCase from '../useCases/users/getUser';
@@ -24,20 +23,19 @@ import DeleteUserUseCase from '../useCases/users/deleteUser';
 
 // Todas as rotas de Users
 const usersRoutes = Router();
-const repository = new UserRepository();
 
 // Listagem
-usersRoutes.get('/', (request, response) => {
-  const useCase = new ListUsersUseCase(repository);
-  const users = useCase.execute();
+usersRoutes.get('/', async (request, response) => {
+  const useCase = new ListUsersUseCase();
+  const users = await useCase.execute();
   return response.send(users);
 });
 
 // Pesquisa
-usersRoutes.get('/:id', (request, response) => {
+usersRoutes.get('/:id', async (request, response) => {
   const { id } = request.params;
-  const useCase = new GetUserUseCase(repository);
-  const user = useCase.execute(id);
+  const useCase = new GetUserUseCase();
+  const user = await useCase.execute(id);
 
   if (!user) {
     return response.status(404).send();
@@ -46,31 +44,32 @@ usersRoutes.get('/:id', (request, response) => {
 });
 
 // Cadastro
-usersRoutes.post('/', (request, response) => {
-  const useCase = new CreateUserUseCase(repository);
-  const user = useCase.execute(request.body as UserDto);
+usersRoutes.post('/', async (request, response) => {
+  const useCase = new CreateUserUseCase();
+  const user = await useCase.execute(request.body as UserDto);
   return response.status(201).send(user);
 });
 
 // Edição
-usersRoutes.put('/:id', (request, response) => {
+usersRoutes.put('/:id', async (request, response) => {
   const { id } = request.params;
   const { name, email, password } = request.body as User;
-  const useCase = new UpdateUserUseCase(repository);
-  const user = useCase.execute({
+  const useCase = new UpdateUserUseCase();
+  const user = await useCase.execute({
     id,
     name,
     email,
     password,
+    roleId: '',
   });
   return response.send(user);
 });
 
 // Remoção
-usersRoutes.delete('/:id', (request, response) => {
+usersRoutes.delete('/:id', async (request, response) => {
   const { id } = request.params;
-  const useCase = new DeleteUserUseCase(repository);
-  useCase.execute(id);
+  const useCase = new DeleteUserUseCase();
+  await useCase.execute(id);
   return response.send({});
 });
 

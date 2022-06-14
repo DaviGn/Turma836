@@ -46,6 +46,7 @@
     "no-param-reassign": "off",
     "no-promise-executor-return": "off",
     "no-plusplus": "off",
+    "no-return-await": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",
     "no-unsafe-optional-chaining": "off",

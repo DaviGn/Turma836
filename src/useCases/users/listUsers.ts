@@ -1,14 +1,15 @@
+import { Repository } from 'typeorm';
 import User from '../../models/User';
 import UsersRepository from '../../repositories/usersRepository';
 
 export default class ListUsersUseCase {
-  private _repository: UsersRepository;
+  private _repository: Repository<User>;
 
-  constructor(repository: UsersRepository) {
-    this._repository = repository;
+  constructor() {
+    this._repository = UsersRepository;
   }
 
-  public execute(): User[] {
-    return this._repository.list();
+  public async execute(): Promise<User[]> {
+    return await this._repository.find();
   }
 }

@@ -1,3 +1,4 @@
+import { Not, Repository } from 'typeorm';
 import FieldError from '../../dtos/fieldError';
 import UserDto from '../../dtos/userDto';
 import FieldException from '../../exceptions/fieldExceptions';
@@ -6,13 +7,18 @@ import UsersRepository from '../../repositories/usersRepository';
 import { emailPattern } from '../../utils/regex';
 
 export default class UpdateUserUseCase {
-  private _repository: UsersRepository;
+  private _repository: Repository<User>;
 
-  constructor(repository: UsersRepository) {
-    this._repository = repository;
+  constructor() {
+    this._repository = UsersRepository;
   }
 
-  public execute({ id, name, email, password }: UserDto): User {
+  public async execute({
+    id,
+    name,
+    email,
+    password,
+  }: UserDto): Promise<User | null> {
     const errors: FieldError[] = [];
 
     if (!name) {
@@ -36,13 +42,14 @@ export default class UpdateUserUseCase {
       });
     }
 
-    const userByEmail = this._repository.get(
-      (x) =>
-        x.email.toUpperCase() === email.toUpperCase() &&
-        x.id.toUpperCase() !== id.toUpperCase()
-    );
+    const countUsersByEmail = await this._repository.count({
+      where: {
+        id: Not(id),
+        email,
+      },
+    });
 
-    if (userByEmail) {
+    if (countUsersByEmail) {
       errors.push({
         field: 'email',
         message: 'E-mail is already in use!',
@@ -60,13 +67,17 @@ export default class UpdateUserUseCase {
       throw new FieldException(errors);
     }
 
-    const user = new User({
-      name,
-      email,
-      password,
+    const user = await this._repository.findOneBy({
+      id,
     });
-    user.id = id;
-    this._repository.update(user);
+
+    if (!user) return null;
+
+    user.name = name;
+    user.email = email;
+    user.password = password;
+
+    await this._repository.save(user);
     return user;
   }
 }

@@ -1,41 +1,45 @@
 import User from '../models/User';
+import dataSource from '../configs/dbConfig';
 
-export default class UsersRepository {
-  private _users: User[];
+const UserRepository = dataSource.getRepository(User).extend({});
+export default UserRepository;
 
-  constructor() {
-    this._users = [];
-  }
+// export default class UsersRepository {
+//   private _users: User[];
 
-  public list(): User[] {
-    return this._users;
-  }
+//   constructor() {
+//     this._users = [];
+//   }
 
-  public getById(id: string): User | undefined {
-    return this._users.find((x) => x.id.toUpperCase() === id.toUpperCase());
-  }
+//   public list(): User[] {
+//     return this._users;
+//   }
 
-  public get(predicate: (value: User) => boolean): User | undefined {
-    return this._users.find(predicate);
-  }
+//   public getById(id: string): User | undefined {
+//     return this._users.find((x) => x.id.toUpperCase() === id.toUpperCase());
+//   }
 
-  public add(user: User): void {
-    this._users.push(user);
-  }
+//   public get(predicate: (value: User) => boolean): User | undefined {
+//     return this._users.find(predicate);
+//   }
 
-  public update(user: User): void {
-    const userFoundIndex = this._users.findIndex(
-      (x) => x.id.toUpperCase() === user.id.toUpperCase()
-    );
+//   public add(user: User): void {
+//     this._users.push(user);
+//   }
 
-    if (userFoundIndex === -1) return;
+//   public update(user: User): void {
+//     const userFoundIndex = this._users.findIndex(
+//       (x) => x.id.toUpperCase() === user.id.toUpperCase()
+//     );
 
-    this._users[userFoundIndex] = user;
-  }
+//     if (userFoundIndex === -1) return;
 
-  public delete(id: string): void {
-    this._users = this._users.filter(
-      (x) => x.id.toUpperCase() !== id.toUpperCase()
-    );
-  }
-}
+//     this._users[userFoundIndex] = user;
+//   }
+
+//   public delete(id: string): void {
+//     this._users = this._users.filter(
+//       (x) => x.id.toUpperCase() !== id.toUpperCase()
+//     );
+//   }
+// }

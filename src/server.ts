@@ -3,6 +3,11 @@ import cors from 'cors';
 import logMiddleware from './middlewares/logs';
 import routes from './routes';
 import errorsMiddleware from './middlewares/errors';
+import AppDataSource from './configs/dbConfig';
+
+AppDataSource.initialize()
+  .then()
+  .catch((err) => console.log(err));
 
 // Definir os middlewares
 const server = express();
