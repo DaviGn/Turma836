@@ -3,17 +3,17 @@ import User from '../../models/User';
 import UsersRepository from '../../repositories/usersRepository';
 
 export default class ListUsersUseCase {
-  private _repository: Repository<User>;
+    private _repository: Repository<User>;
 
-  constructor() {
-    this._repository = UsersRepository;
-  }
+    constructor() {
+        this._repository = UsersRepository;
+    }
 
-  public async execute(): Promise<User[]> {
-    return await this._repository.find({
-      relations: {
-        role: true,
-      },
-    });
-  }
+    public async execute(): Promise<User[]> {
+        return await this._repository.find({
+            relations: {
+                role: true,
+            },
+        });
+    }
 }

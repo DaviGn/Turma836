@@ -7,7 +7,7 @@ import UsersRoutes from './users.routes';
 const routes = Router();
 
 routes.get('/', (request, response) => {
-  return response.send('Hello World!');
+    return response.send('Hello World!');
 });
 
 routes.use('/auth', AuthRoutes);
