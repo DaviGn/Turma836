@@ -10,6 +10,10 @@ export default class ListUsersUseCase {
   }
 
   public async execute(): Promise<User[]> {
-    return await this._repository.find();
+    return await this._repository.find({
+      relations: {
+        role: true,
+      },
+    });
   }
 }

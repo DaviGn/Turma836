@@ -5,16 +5,12 @@ import FieldException from '../../exceptions/fieldExceptions';
 import User from '../../models/User';
 import UsersRepository from '../../repositories/usersRepository';
 import { emailPattern } from '../../utils/regex';
-import dataSource from '../../configs/dbConfig';
-import Role from '../../models/Role';
 
 export default class CreateUserUseCase {
   private _repository: Repository<User>;
-  private _rolesRepository: Repository<Role>;
 
   constructor() {
     this._repository = UsersRepository;
-    this._rolesRepository = dataSource.getRepository(Role);
   }
 
   public async execute({
@@ -70,17 +66,11 @@ export default class CreateUserUseCase {
       throw new FieldException(errors);
     }
 
-    const role = await this._rolesRepository.findOneBy({
-      id: roleId,
-    });
-
-    if (!role) return null;
-
     const user = new User();
     user.name = name;
     user.email = email;
     user.password = password;
-    user.role = role;
+    user.roleid = roleId;
 
     await this._repository.save(user);
     return user;

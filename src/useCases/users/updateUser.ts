@@ -18,6 +18,7 @@ export default class UpdateUserUseCase {
     name,
     email,
     password,
+    roleId,
   }: UserDto): Promise<User | null> {
     const errors: FieldError[] = [];
 
@@ -76,6 +77,7 @@ export default class UpdateUserUseCase {
     user.name = name;
     user.email = email;
     user.password = password;
+    user.roleId = roleId;
 
     await this._repository.save(user);
     return user;
