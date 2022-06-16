@@ -18,6 +18,8 @@ AppDataSource.initialize()
 
 // Definir os middlewares
 const server = express();
+// eslint-disable-next-line no-path-concat
+server.use('/img', express.static(`${__dirname}/img`));
 server.use(cors());
 server.use(express.json());
 server.use(logMiddleware);
