@@ -1,4 +1,7 @@
+import 'dotenv/config';
+import 'express-async-errors';
 import express from 'express';
+import { errors } from 'celebrate';
 import cors from 'cors';
 import logMiddleware from './middlewares/logs';
 import routes from './routes';
@@ -9,12 +12,13 @@ import Role from './models/Role';
 function runServer() {
     // Definir os middlewares
     const server = express();
+    server.use(cors());
     // Arquivos estáticos
     server.use('/img', express.static(`${__dirname}/img`));
-    server.use(cors());
     server.use(express.json());
     server.use(logMiddleware);
     server.use(routes);
+    server.use(errors());
     server.use(errorsMiddleware);
 
     server.listen(3333, () => {
